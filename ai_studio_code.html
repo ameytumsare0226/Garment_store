@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIBE Garments | Professional Store & Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-effect { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+        .gradient-text { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+
+    <!-- NAVIGATION BAR -->
+    <nav class="sticky top-0 z-50 glass-effect border-b border-slate-200 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <div class="bg-indigo-600 p-2 rounded-xl">
+                <i class="fas fa-shirt text-white"></i>
+            </div>
+            <h1 class="text-2xl font-800 tracking-tighter gradient-text font-bold">VIBE GARMENTS</h1>
+        </div>
+        
+        <div class="flex bg-slate-100 p-1 rounded-full border border-slate-200">
+            <button onclick="switchView('customer')" id="btn-customer" class="px-6 py-2 rounded-full text-sm font-bold transition-all bg-white shadow-sm text-indigo-600">
+                Customer View
+            </button>
+            <button onclick="switchView('admin')" id="btn-admin" class="px-6 py-2 rounded-full text-sm font-bold transition-all text-slate-500 hover:text-indigo-600">
+                Admin Panel
+            </button>
+        </div>
+
+        <div class="relative">
+            <button class="p-2 text-slate-600 hover:text-indigo-600 transition-colors relative">
+                <i class="fas fa-shopping-bag text-xl"></i>
+                <span id="cart-count" class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- CUSTOMER VIEW SECTION -->
+    <section id="customer-view" class="max-w-7xl mx-auto p-6 space-y-8">
+        <!-- Hero Section -->
+        <div class="bg-indigo-600 rounded-3xl p-10 text-white flex flex-col md:flex-row justify-between items-center overflow-hidden relative">
+            <div class="z-10">
+                <h2 class="text-4xl font-extrabold mb-4">Summer Collection 2024</h2>
+                <p class="text-indigo-100 text-lg mb-6">High-quality garments designed for your comfort.</p>
+                <button class="bg-white text-indigo-600 px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform">Shop Now</button>
+            </div>
+            <div class="text-8xl opacity-20 absolute -right-10 top-0"><i class="fas fa-tags rotate-12"></i></div>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="flex gap-4 overflow-x-auto pb-2">
+            <button onclick="filterCategory('All')" class="cat-btn active bg-indigo-600 text-white px-6 py-2 rounded-full text-sm font-bold">All Items</button>
+            <button onclick="filterCategory('Tops')" class="cat-btn bg-white border border-slate-200 text-slate-600 px-6 py-2 rounded-full text-sm font-bold hover:border-indigo-400">Tops</button>
+            <button onclick="filterCategory('Bottoms')" class="cat-btn bg-white border border-slate-200 text-slate-600 px-6 py-2 rounded-full text-sm font-bold hover:border-indigo-400">Bottoms</button>
+            <button onclick="filterCategory('Outerwear')" class="cat-btn bg-white border border-slate-200 text-slate-600 px-6 py-2 rounded-full text-sm font-bold hover:border-indigo-400">Outerwear</button>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Products injected by JS -->
+        </div>
+    </section>
+
+    <!-- ADMIN VIEW SECTION (Hidden by default) -->
+    <section id="admin-view" class="hidden max-w-7xl mx-auto p-6 space-y-8">
+        <div class="flex justify-between items-end">
+            <div>
+                <h2 class="text-3xl font-black text-slate-800">Business Dashboard</h2>
+                <p class="text-slate-500">Real-time inventory and financial insights.</p>
+            </div>
+            <button onclick="generateReport()" class="bg-emerald-500 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-600 shadow-lg shadow-emerald-100 transition-all">
+                <i class="fas fa-file-export mr-2"></i>Generate Full Report
+            </button>
+        </div>
+
+        <!-- Financial Terms (AI Explanation Section) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex justify-between mb-4">
+                    <span class="p-3 bg-blue-50 text-blue-600 rounded-xl font-bold">Revenue</span>
+                    <i class="fas fa-circle-info text-slate-300 cursor-help" title="AI Explain: Total income generated from sales before any deductions."></i>
+                </div>
+                <h3 class="text-2xl font-black text-slate-800">$12,450.00</h3>
+                <p class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-bold">Gross Sales</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex justify-between mb-4">
+                    <span class="p-3 bg-purple-50 text-purple-600 rounded-xl font-bold">Inventory Turnover</span>
+                    <i class="fas fa-circle-info text-slate-300 cursor-help" title="AI Explain: The number of times a business has sold and replaced its inventory during a given period."></i>
+                </div>
+                <h3 class="text-2xl font-black text-slate-800">4.2x</h3>
+                <p class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-bold">Stock Efficiency</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex justify-between mb-4">
+                    <span class="p-3 bg-rose-50 text-rose-600 rounded-xl font-bold">COGS</span>
+                    <i class="fas fa-circle-info text-slate-300 cursor-help" title="AI Explain: Cost of Goods Sold includes the direct costs of producing the garments sold by a company."></i>
+                </div>
+                <h3 class="text-2xl font-black text-slate-800">$5,120.00</h3>
+                <p class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-bold">Direct Costs</p>
+            </div>
+        </div>
+
+        <!-- Detailed Inventory Report -->
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+            <div class="p-6 border-b border-slate-100 bg-slate-50/50">
+                <h4 class="font-bold text-slate-700">Inventory Management Report</h4>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-400 text-xs uppercase font-bold tracking-widest border-b border-slate-100">
+                            <th class="px-6 py-4">Product Name</th>
+                            <th class="px-6 py-4">Category</th>
+                            <th class="px-6 py-4">Size Availability (S/M/L)</th>
+                            <th class="px-6 py-4">Units Sold</th>
+                            <th class="px-6 py-4">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="report-table-body" class="divide-y divide-slate-100">
+                        <!-- Data injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 mt-20 py-12 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="text-center md:text-left">
+                <h1 class="text-xl font-bold gradient-text mb-2">VIBE GARMENTS</h1>
+                <p class="text-slate-400 text-sm max-w-xs">Building the future of fashion retail with integrated financial intelligence.</p>
+            </div>
+            <div class="flex gap-10">
+                <div>
+                    <h5 class="font-bold text-slate-700 mb-4 text-sm">Helpful Terms</h5>
+                    <ul class="text-slate-500 text-sm space-y-2">
+                        <li><span class="text-indigo-600 font-bold">Asset:</span> Something you own.</li>
+                        <li><span class="text-indigo-600 font-bold">Liability:</span> Something you owe.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- DATA STORE ---
+        const products = [
+            { id: 1, name: "Streetwear Hoodie", category: "Outerwear", price: 59, img: "🧥", sizes: { S: 5, M: 12, L: 8 }, sold: 45 },
+            { id: 2, name: "Linen Summer Shirt", category: "Tops", price: 35, img: "👕", sizes: { S: 10, M: 15, L: 20 }, sold: 88 },
+            { id: 3, name: "Slim Fit Chinos", category: "Bottoms", price: 49, img: "👖", sizes: { S: 4, M: 8, L: 3 }, sold: 32 },
+            { id: 4, name: "Classic White Tee", category: "Tops", price: 25, img: "👕", sizes: { S: 25, M: 30, L: 25 }, sold: 120 },
+            { id: 5, name: "Denim Jacket", category: "Outerwear", price: 89, img: "🧥", sizes: { S: 2, M: 5, L: 1 }, sold: 15 },
+            { id: 6, name: "Jogger Pants", category: "Bottoms", price: 45, img: "👖", sizes: { S: 12, M: 12, L: 12 }, sold: 56 }
+        ];
+
+        let cartCount = 0;
+
+        // --- CORE FUNCTIONS ---
+
+        function switchView(view) {
+            const customerSection = document.getElementById('customer-view');
+            const adminSection = document.getElementById('admin-view');
+            const btnCust = document.getElementById('btn-customer');
+            const btnAdmin = document.getElementById('btn-admin');
+
+            if (view === 'customer') {
+                customerSection.classList.remove('hidden');
+                adminSection.classList.add('hidden');
+                btnCust.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+                btnCust.classList.remove('text-slate-500');
+                btnAdmin.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                btnAdmin.classList.add('text-slate-500');
+            } else {
+                customerSection.classList.add('hidden');
+                adminSection.classList.remove('hidden');
+                btnAdmin.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+                btnAdmin.classList.remove('text-slate-500');
+                btnCust.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                btnCust.classList.add('text-slate-500');
+                renderAdminReport();
+            }
+        }
+
+        function filterCategory(cat) {
+            // Update UI buttons
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white');
+                btn.classList.add('bg-white', 'text-slate-600');
+            });
+            event.target.classList.add('bg-indigo-600', 'text-white');
+            
+            renderProducts(cat);
+        }
+
+        function addToCart() {
+            cartCount++;
+            document.getElementById('cart-count').innerText = cartCount;
+            alert("Success! Item added to your cart.");
+        }
+
+        // --- RENDERERS ---
+
+        function renderProducts(filter = 'All') {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+            
+            const filtered = filter === 'All' ? products : products.filter(p => p.category === filter);
+
+            filtered.forEach(p => {
+                grid.innerHTML += `
+                    <div class="bg-white rounded-3xl border border-slate-100 p-4 hover:shadow-xl transition-all group">
+                        <div class="bg-slate-50 h-52 rounded-2xl flex items-center justify-center text-6xl group-hover:scale-105 transition-transform duration-300">
+                            ${p.img}
+                        </div>
+                        <div class="mt-4 px-2">
+                            <span class="text-[10px] font-bold uppercase text-indigo-500 tracking-widest">${p.category}</span>
+                            <h3 class="font-bold text-slate-800 text-lg">${p.name}</h3>
+                            <div class="flex justify-between items-center mt-4">
+                                <span class="text-2xl font-black text-slate-900">$${p.price}</span>
+                                <button onclick="addToCart()" class="bg-slate-900 text-white p-2 w-10 h-10 rounded-xl hover:bg-indigo-600 transition-colors">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderAdminReport() {
+            const tbody = document.getElementById('report-table-body');
+            tbody.innerHTML = '';
+
+            products.forEach(p => {
+                const totalAvail = p.sizes.S + p.sizes.M + p.sizes.L;
+                const statusColor = totalAvail < 10 ? 'text-amber-500 bg-amber-50' : 'text-emerald-500 bg-emerald-50';
+                
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-6 py-4 font-bold text-slate-700">${p.name}</td>
+                        <td class="px-6 py-4 text-slate-500 text-sm">${p.category}</td>
+                        <td class="px-6 py-4">
+                            <div class="flex gap-2 text-[10px] font-bold">
+                                <span class="bg-slate-100 px-2 py-1 rounded">S: ${p.sizes.S}</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded">M: ${p.sizes.M}</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded">L: ${p.sizes.L}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 font-bold text-indigo-600">${p.sold}</td>
+                        <td class="px-6 py-4">
+                            <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase ${statusColor}">
+                                ${totalAvail < 10 ? 'Low Stock' : 'Healthy'}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function generateReport() {
+            alert("Inventory Report has been compiled and downloaded to Admin storage.");
+        }
+
+        // Initialize
+        renderProducts();
+    </script>
+</body>
+</html>
